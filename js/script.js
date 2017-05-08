@@ -1,4 +1,4 @@
-var nameEl = document.querySelector("#name");                               //Put focus on name field
+var nameEl = document.querySelector('#name');                               //Put focus on name field
 nameEl.focus();
 nameEl.required = true;                                                     //Validation added for name
 
@@ -19,6 +19,8 @@ fieldset.appendChild(mybr);
 fieldset.appendChild(input).hidden = true;                                  //Hiding the text field
 
 var design = document.getElementById('design');
+design[0].value = "";
+design.required = true;
 
 document.getElementById('colors-js-puns').hidden = true;
 document.getElementById('color').hidden = true;
@@ -38,30 +40,7 @@ for (var i = 0; i < colourArray.length; i++) {                              //Fo
 }
 
 design.addEventListener('change', function() {                              //Function created to only display correct colours depending on design
-    if(design.value == 'js puns') {
-        document.getElementById('colors-js-puns').hidden = false;
-        document.getElementById('color').hidden = false;
-        document.getElementById('color').value = "cornflowerblue";          //Setting default colour depending on theme
-        document.getElementById('color_option0').hidden = false;
-        document.getElementById('color_option1').hidden = false;
-        document.getElementById('color_option2').hidden = false;
-        document.getElementById('color_option3').hidden = true;
-        document.getElementById('color_option4').hidden = true;
-        document.getElementById('color_option5').hidden = true;
-    } else if (design.value == 'heart js') {
-        document.getElementById('colors-js-puns').hidden = false;
-        document.getElementById('color').hidden = false;
-        document.getElementById('color').value = "tomato";                  //Setting default colour depending on theme
-        document.getElementById('color_option0').hidden = true;
-        document.getElementById('color_option1').hidden = true;
-        document.getElementById('color_option2').hidden = true;
-        document.getElementById('color_option3').hidden = false;
-        document.getElementById('color_option4').hidden = false;
-        document.getElementById('color_option5').hidden = false;
-    } else {
-        document.getElementById('colors-js-puns').hidden = true;
-        document.getElementById('color').hidden = true;
-    }
+    validShirt();
 });
 
 var amount = 0;                                                             //Variable to hold the value amount
@@ -197,7 +176,7 @@ var creditCard = document.getElementById('cc-num');
 var zip = document.getElementById('zip');
 var cvv = document.getElementById('cvv');
 
-paymentSelect.addEventListener('change', function() {                       //Creditcard validation
+paymentSelect.addEventListener('change', function() {                       //Credit card validation
     if (paymentSelect.value == 'credit card') {
         creditCard.minLength='13';
         creditCard.maxLength='16';
@@ -220,6 +199,161 @@ paymentSelect.addEventListener('change', function() {                       //Cr
         zip.required = false;
         cvv.required = false;
     }
+});
+
+//Validation messages
+
+var registerBtn = document.querySelector('button');
+
+var nameTitle = document.querySelectorAll('fieldset label')[0];
+var emailTitle = document.querySelectorAll('fieldset label')[1];
+var shirtTitle = document.querySelectorAll('fieldset legend')[1];
+var activityTitle = document.querySelectorAll('fieldset legend')[2];
+
+
+var selectTheme = document.querySelectorAll('#design option')[0];
+var secondFieldset = document.querySelectorAll('fieldset div')[0];
+var secondLabel = document.createElement('Label');
+secondFieldset.appendChild(secondLabel);
+secondH4 = document.createElement('h4');
+secondLabel.appendChild(secondH4);
+secondH4.id = 'shirt_valid_id';
+
+var cardLabel = document.querySelectorAll('#credit-card label')[0];
+var zipLabel = document.querySelectorAll('#credit-card label')[1];
+var cvvLabel = document.querySelectorAll('#credit-card label')[2];
+
+function validName() {
+    if (nameEl.value == "") {
+        nameTitle.innerHTML = "Name: Please enter name";
+        nameTitle.style.color = "red";
+    } else if (!nameEl.value == "") {
+        nameTitle.innerHTML = "Name:";
+        nameTitle.style.color = "black";
+    }
+}
+
+function validEmail() {
+    if (email.value == ""){
+        emailTitle.innerHTML = "Email: Please enter email";
+        emailTitle.style.color = "red";
+    } else if (!email.value == "") {
+        emailTitle.innerHTML = "Email:";
+        emailTitle.style.color = "black";
+    }
+}
+
+function validShirt() {                                                         //Function created to only display correct colours depending on design
+    if(design.value == 'js puns') {
+        document.getElementById('colors-js-puns').hidden = false;
+        document.getElementById('color').hidden = false;
+        document.getElementById('color').value = "cornflowerblue";              //Setting default colour depending on theme
+        document.getElementById('color_option0').hidden = false;
+        document.getElementById('color_option1').hidden = false;
+        document.getElementById('color_option2').hidden = false;
+        document.getElementById('color_option3').hidden = true;
+        document.getElementById('color_option4').hidden = true;
+        document.getElementById('color_option5').hidden = true;
+        secondH4.innerHTML = '';
+    } else if (design.value == 'heart js') {
+        document.getElementById('colors-js-puns').hidden = false;
+        document.getElementById('color').hidden = false;
+        document.getElementById('color').value = "tomato";                      //Setting default colour depending on theme
+        document.getElementById('color_option0').hidden = true;
+        document.getElementById('color_option1').hidden = true;
+        document.getElementById('color_option2').hidden = true;
+        document.getElementById('color_option3').hidden = false;
+        document.getElementById('color_option4').hidden = false;
+        document.getElementById('color_option5').hidden = false;
+        secondH4.innerHTML = '';
+    } else {
+        document.getElementById('colors-js-puns').hidden = true;
+        document.getElementById('color').hidden = true;
+        document.getElementById('shirt_valid_id').innerHTML = 'Select a shirt';
+        document.getElementById('shirt_valid_id').style.color = 'red';
+    }
+}
+
+function validActivities() {
+    if (
+        activitiesElems[0].checked == false &&
+        activitiesElems[1].checked == false &&
+        activitiesElems[2].checked == false &&
+        activitiesElems[3].checked == false &&
+        activitiesElems[4].checked == false &&
+        activitiesElems[5].checked == false &&
+        activitiesElems[6].checked == false
+    ) {
+        document.getElementById('validation_message').innerHTML = 'You need to select at least one of the activity';
+        document.getElementById('validation_message').style.color = 'red';
+    } else {
+        document.getElementById('validation_message').innerHTML = '';
+    }
+}
+
+function paymentMethod () {
+    if (
+        document.getElementById('credit-card').hidden == true &&
+        document.getElementById('paypal').hidden == true &&
+        document.getElementById('bitcoin').hidden == true &&
+        validationPayment.hidden == false
+    ) {
+        validationPayment.innerHTML = 'Please select a payment method';
+        validationPayment.style.color = 'red';
+    }
+}
+
+function cardNumValidation () {
+    if (
+        document.getElementById('credit-card').hidden == false &&
+        creditCard.value == ""
+    ) {
+        cardLabel.style.color = 'red';
+    } else if (
+        document.getElementById('credit-card').hidden == false &&
+        !creditCard.value == ""
+    ) {
+        cardLabel.style.color = 'black';
+    }
+}
+
+function zipValidation () {
+    if (
+        document.getElementById('credit-card').hidden == false &&
+        zip.value == ""
+    ) {
+        zipLabel.style.color = 'red';
+    } else if (
+        document.getElementById('credit-card').hidden == false &&
+        !zip.value == ""
+    ) {
+        zipLabel.style.color = 'black';
+    }
+}
+
+function cvvValidation () {
+    if (
+        document.getElementById('credit-card').hidden == false &&
+        cvv.value == ""
+    ) {
+        cvvLabel.style.color = 'red';
+    } else if (
+        document.getElementById('credit-card').hidden == false &&
+        !cvv.value == ""
+    ) {
+        cvvLabel.style.color = 'black';
+    }
+}
+
+registerBtn.addEventListener('click', function() {
+    validName();
+    validEmail();
+    validActivities();
+    validShirt();
+    paymentMethod();
+    cardNumValidation();
+    zipValidation();
+    cvvValidation();
 });
 
 /*
